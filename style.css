@@ -1,0 +1,335 @@
+:root {
+    --primary-color: #ff4d6d;
+    --secondary-color: #ff8fa3;
+    --bg-color: #fff0f3;
+    --text-color: #590d22;
+    --white: #ffffff;
+    --font-heading: 'Dancing Script', cursive;
+    --font-body: 'Nunito', sans-serif;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    font-family: var(--font-body);
+    overflow-x: hidden;
+    height: 100vh;
+    width: 100vw;
+}
+
+#app {
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+
+.stage {
+    position: absolute; /* Using absolute to stack them or transitions */
+    top: 0;
+    left: 0;
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 0.5s ease-in-out;
+    padding: 20px;
+}
+
+.stage.hidden {
+    opacity: 0;
+    pointer-events: none;
+    z-index: -1;
+    display: none; /* simple hide for now */
+}
+
+.stage.active {
+    opacity: 1;
+    pointer-events: all;
+    z-index: 10;
+    display: flex;
+}
+
+/* Typography */
+.romantic-font {
+    font-family: var(--font-heading);
+    font-size: 3.5rem;
+    margin-bottom: 2rem;
+    color: var(--primary-color);
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+}
+
+h2 {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    color: var(--text-color);
+}
+
+p {
+    font-size: 1.1rem;
+    margin-bottom: 1.5rem;
+    line-height: 1.6;
+}
+
+.t-center {
+    text-align: center;
+}
+
+/* Buttons */
+.buttons {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    position: relative; /* For button movement */
+    min-height: 60px; /* Space for buttons */
+}
+
+.btn {
+    padding: 12px 30px;
+    font-size: 1.2rem;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    font-family: var(--font-body);
+    font-weight: 700;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.btn.primary {
+    background-color: var(--primary-color);
+    color: var(--white);
+    box-shadow: 0 4px 15px rgba(255, 77, 109, 0.4);
+}
+
+.btn.primary:hover {
+    transform: scale(1.05);
+    background-color: #ff2a55;
+}
+
+.btn.secondary {
+    background-color: var(--white);
+    color: var(--text-color);
+    border: 2px solid var(--secondary-color);
+}
+
+/* Stage 1: Runaway Button */
+#noBtn {
+    position: relative; /* Default relative, switches to absolute when running */
+    transition: top 0.2s ease, left 0.2s ease;
+}
+
+/* Stage 2: Lock Screen */
+.lock-icon {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+}
+
+.pin-input-container {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    align-items: center;
+}
+
+#pinInput {
+    padding: 15px;
+    font-size: 1.5rem;
+    text-align: center;
+    border: 2px solid var(--secondary-color);
+    border-radius: 15px;
+    width: 200px;
+    letter-spacing: 5px;
+    outline: none;
+}
+
+#pinInput:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 10px rgba(255, 77, 109, 0.2);
+}
+
+.error {
+    color: #d00000;
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+.shake {
+    animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both;
+}
+
+@keyframes shake {
+    10%, 90% { transform: translate3d(-2px, 0, 0); }
+    20%, 80% { transform: translate3d(4px, 0, 0); }
+    30%, 50%, 70% { transform: translate3d(-8px, 0, 0); }
+    40%, 60% { transform: translate3d(8px, 0, 0); }
+}
+
+/* Stage 3: Timeline */
+/* Override display for stage3 because it's long */
+#stage3.active {
+    display: block; /* Allow scrolling */
+    position: relative;
+    padding-top: 50px;
+}
+
+.timeline {
+    position: relative;
+    max-width: 800px;
+    margin: 50px auto;
+    padding: 0 20px;
+}
+
+/* The Line */
+.timeline::after {
+    content: '';
+    position: absolute;
+    width: 4px;
+    background-color: var(--secondary-color);
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    margin-left: -2px;
+    border-radius: 2px;
+}
+
+.timeline-item {
+    padding: 10px 40px;
+    position: relative;
+    background-color: inherit;
+    width: 50%;
+    opacity: 0; /* JS handles fade in */
+    transform: translateY(20px);
+    transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+
+.timeline-item.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Left side */
+.timeline-item:nth-child(even) {
+    left: 0;
+}
+
+/* Right side */
+.timeline-item:nth-child(odd) {
+    left: 50%;
+}
+
+/* Circle on line */
+.timeline-item::after {
+    content: '❤️';
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    right: -17px;
+    background-color: var(--bg-color);
+    border: 2px solid var(--primary-color);
+    top: 15px;
+    border-radius: 50%;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8rem;
+}
+
+/* Fix circle for right side */
+.timeline-item:nth-child(odd)::after {
+    left: -17px;
+}
+
+.timeline-content {
+    padding: 20px;
+    background-color: var(--white);
+    border-radius: 15px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.date {
+    font-size: 0.9rem;
+    color: var(--primary-color);
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.timeline-content h3 {
+    margin-bottom: 10px;
+    font-family: var(--font-heading);
+    font-size: 1.8rem;
+}
+
+.timeline-content img {
+    width: 100%;
+    border-radius: 10px;
+    margin-top: 10px;
+}
+
+.final-celebration {
+    padding: 50px 20px;
+    margin-bottom: 50px;
+}
+
+.heart-beat {
+    font-size: 5rem;
+    animation: beat 1.5s infinite;
+}
+
+@keyframes beat {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.2); }
+    100% { transform: scale(1); }
+}
+
+/* Confetti Canvas */
+#confetti {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 100;
+}
+
+/* Responsive adjustments */
+@media screen and (max-width: 600px) {
+    .romantic-font {
+        font-size: 2.5rem;
+    }
+
+    .timeline::after {
+        left: 31px;
+    }
+    
+    .timeline-item {
+        width: 100%;
+        padding-left: 70px;
+        padding-right: 25px;
+    }
+    
+    .timeline-item::after {
+        left: 15px; /* Adjust circle position */
+    }
+    
+    .timeline-item:nth-child(even) {
+        left: 0;
+    }
+    
+    .timeline-item:nth-child(odd) {
+        left: 0; /* Reset left for odd items */
+    }
+    
+    /* Odd items circle override */
+    .timeline-item:nth-child(odd)::after {
+        left: 15px;
+    }
+}
