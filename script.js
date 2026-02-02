@@ -77,7 +77,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const errorMsg = document.getElementById('errorMsg');
 
     // THE SECRET CODE (DDMMYYYY)
-    const SECRET_CODE = "26112022";
+    const SECRET_CODE = "30092022";
 
     const checkPin = () => {
         if (pinInput.value === SECRET_CODE) {
